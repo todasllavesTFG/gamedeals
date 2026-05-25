@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local environment and secrets
+.env
+.env.*
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Office lock files
+~$*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.claude/
