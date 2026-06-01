@@ -9,6 +9,7 @@ from app.models.games import Game
 from app.models.prices import Price
 from app.models.stores import Store
 from app.services.cheapshark import fetch_deals_from_api, save_deals_to_db
+from app.services.images import game_image_url
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ def _serialize_price(p: Price) -> dict:
             "id": p.game.id,
             "title": p.game.title,
             "slug": p.game.slug,
-            "image_url": p.game.image_url,
+            "image_url": game_image_url(p.game.image_url, p.game.steam_app_id),
             "metacritic_score": p.game.metacritic_score,
             "platform": p.game.platform,
         },

@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.models.games import Game
 from app.models.prices import Price
 from app.models.price_history import PriceHistory
+from app.services.images import game_image_url
 
 
 def get_unified_game(db: Session, game_id: int) -> dict | None:
@@ -57,7 +58,7 @@ def get_unified_game(db: Session, game_id: int) -> dict | None:
         "title": game.title,
         "slug": game.slug,
         "description": game.description,
-        "image_url": game.image_url,
+        "image_url": game_image_url(game.image_url, game.steam_app_id),
         "genre": game.genre,
         "platform": game.platform,
         "metacritic_score": game.metacritic_score,

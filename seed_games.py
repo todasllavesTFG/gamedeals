@@ -314,6 +314,10 @@ def slugify(title):
     return s
 
 
+def steam_header_image_url(steam_app_id):
+    return f"https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/{steam_app_id}/header.jpg"
+
+
 def get_or_create_store(cur, name):
     cur.execute("SELECT id FROM stores WHERE name = ?", (name,))
     row = cur.fetchone()
@@ -348,9 +352,9 @@ def main():
 
         cur.execute(
             """INSERT INTO games
-               (title, slug, platform, genre, metacritic_score, steam_app_id, created_at, updated_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-            (title, slug, plat, genre, meta, steam_id, NOW, NOW)
+               (title, slug, platform, genre, metacritic_score, steam_app_id, image_url, created_at, updated_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            (title, slug, plat, genre, meta, steam_id, steam_header_image_url(steam_id), NOW, NOW)
         )
         game_id = cur.lastrowid
         existing_slugs.add(slug)

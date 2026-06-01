@@ -9,6 +9,7 @@ from app.models.games import Game
 from app.models.prices import Price
 from app.models.price_history import PriceHistory
 from app.models.stores import Store
+from app.services.images import steam_header_image_url
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,8 @@ async def enrich_game_with_steam(db: Session, game_id: int) -> bool:
     details = await get_app_details(game.steam_app_id)
     if not details or not details.get("price"):
         return False
+
+    game.image_url = details.get("header_image") or game.image_url or steam_header_image_url(game.steam_app_id)
 
     steam_store = db.query(Store).filter_by(name="Steam").first()
     if not steam_store:

@@ -8,6 +8,7 @@ from app.models.games import Game
 from app.models.prices import Price
 from app.models.price_history import PriceHistory
 from app.models.stores import Store
+from app.services.images import steam_header_image_url
 
 logger = logging.getLogger(__name__)
 
@@ -74,17 +75,21 @@ def _get_or_create_game(db: Session, deal: dict) -> Game:
     if steam_app_id:
         game = db.query(Game).filter_by(steam_app_id=str(steam_app_id)).first()
         if game:
+            if not game.image_url:
+                game.image_url = deal.get("thumb") or steam_header_image_url(steam_app_id)
             return game
 
     slug = _slugify(deal["title"])
     game = db.query(Game).filter_by(slug=slug).first()
     if game:
+        if not game.image_url:
+            game.image_url = deal.get("thumb") or steam_header_image_url(steam_app_id)
         return game
 
     game = Game(
         title=deal["title"],
         slug=slug,
-        image_url=deal.get("thumb"),
+        image_url=deal.get("thumb") or steam_header_image_url(steam_app_id),
         metacritic_score=int(deal["metacriticScore"]) if deal.get("metacriticScore") and deal["metacriticScore"] != "0" else None,
         steam_app_id=str(steam_app_id) if steam_app_id else None,
         platform="PC",
